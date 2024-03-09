@@ -1,24 +1,22 @@
 function [final_guess, guesses, k, residual] = picard( ...
     fun, x0, kmax, tolerance ...
 )
-    % Check if root was given
+    % x0 is already root
     if fun(x0) == 0
-        final_guess = x0;
-        k = 1;
-        guesses = x0;
-        residual = 0;
+        final_guess = x0; k = 1; guesses = x0; residual = 0;
         return;
     end
 
-
+    % init env
+    k = 1;
     guesses = zeros(kmax, 1);
     residual = zeros(kmax, 1);
 
-    guesses(1) = x0;
-    residual(1) = abs(x0 - fun(x0)) / x0;
+    % initial values
+    guesses(k) = x0;
+    residual(k) = abs(x0 - fun(x0)) / x0;
 
-    % Perform Picard iteration
-    k = 1;
+    % Picard iteration
     while k < kmax && residual(k) > tolerance
         new_guess = fun(guesses(k));
 
@@ -28,15 +26,15 @@ function [final_guess, guesses, k, residual] = picard( ...
         k = k + 1;
     end
 
-    % Trim guesses and residual to actual size
+    % trim vectors
     guesses = guesses(1:k);
     residual = residual(1:k);
 
-    % Check if maximum iterations reached
+    % termination criteria check
     if k == kmax
         disp('Warning: Maximum iterations reached');
     end
 
-    % Return final guess
+    % return
     final_guess = guesses(k - 1);
 end

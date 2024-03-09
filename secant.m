@@ -1,8 +1,11 @@
 function [final_guess, guesses, interations, residual] = secant( ...
     fun, x0, x1, kmax, tolerance ...
 )
-    prevx = x0;
     function new_x = secant_function(x)
+        if exist('prevx', 'var') == 0
+            prevx = x0;
+        end
+
         slope = (fun(x) - fun(prevx)) / (x - prevx);
         new_x = x - fun(x) / slope;
         prevx = x;

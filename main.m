@@ -19,7 +19,7 @@ tolerance=1e-14;
 kmax=1e3;
 
 %% plot function
-f1 = figure('Name','Functions','NumberTitle','off');
+functions = figure('Name','Functions','NumberTitle','off');
 subplot(2, 2, 1);
 fplot(fun, [a, b]);
 grid on;
@@ -50,13 +50,13 @@ x1 = 35000;
 );
 
 %% approximate p_m via Secant method
-%[pm_secant] = secant( ...
-%    fun, x0, x1, kmax, tolerance ...
-%);
+[pm_secant] = secant( ...
+    fun, x0, x1, kmax, tolerance ...
+);
 
 convergence_tolerance = 1e-8;
-if abs(pm - pm_fx_secant) > convergence_tolerance %|| ...
-%    abs(pm_newton - pm_secant) > convergence_tolerance
+if abs(pm - pm_fx_secant) > convergence_tolerance || ...
+    abs(pm - pm_secant) > convergence_tolerance
     error("the three methods doesn't converge");
 end
 
@@ -69,7 +69,7 @@ a = 0; b = 250;
 % function definition
 p_fun = @(t) logistic_growth(t, pm, p0, K);
 
-figure(f1);
+figure(functions);
 subplot(2, 2, 2);
 fplot(p_fun, [a, b]);
 grid on;
