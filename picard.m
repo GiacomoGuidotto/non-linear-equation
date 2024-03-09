@@ -28,12 +28,15 @@ function [final_guess, guesses, k, residual] = picard( ...
         k = k + 1;
     end
 
+    % Trim guesses and residual to actual size
+    guesses = guesses(1:k);
+    residual = residual(1:k);
+
     % Check if maximum iterations reached
     if k == kmax
-        disp('Warning: Maximum iterations reached.');
+        disp('Warning: Maximum iterations reached');
     end
 
-    disp(['k', num2str(k)]);
     % Return final guess
     final_guess = guesses(k - 1);
 end

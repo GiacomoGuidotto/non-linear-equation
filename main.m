@@ -19,7 +19,7 @@ tolerance=1e-14;
 kmax=1e3;
 
 %% plot function
-f1 = figure('Name','Plotted functions','NumberTitle','off');
+f1 = figure('Name','Functions','NumberTitle','off');
 subplot(2, 2, 1);
 fplot(fun, [a, b]);
 grid on;
@@ -27,12 +27,15 @@ grid on;
 title('$f: p_m \to f(p_m) = linear\ equation\ of\ p_m$', 'interpreter','latex');
 subtitle(['as p(', num2str(t1), ') = ', num2str(p1)], 'interpreter','latex');
 xlabel("p_m"); ylabel("f(p_m)");
+xline(0, ':k'); yline(0, ':k');
 
 subplot(2, 2, 3);
 fplot(fun_prime, [a, b]);
 grid on;
 title("$f'$", 'interpreter','latex');
 xlabel("p_m"); ylabel("f'(p_m)");
+xline(0, ':k'); yline(0, ':k');
+
 
 %% approximate p_m via Newton method
 x0 = 30000;
@@ -61,7 +64,7 @@ end
 disp(['final approximation of p_m: ', num2str(pm)]);
 
 % interval to plot
-a = 0; b = 200;
+a = 0; b = 250;
 
 % function definition
 p_fun = @(t) logistic_growth(t, pm, p0, K);
@@ -77,7 +80,9 @@ hold on;
 
 T = 90;
 res = p_fun(T);
-plot(T, res, 'b.');
+yticks([0, p1, res, pm]); yticklabels([0, p1, res, pm]);
+xticks([0, t1, T]); xticklabels([0, t1, T]);
+plot(T, res, 'k.');
 hold off;
 
 disp(['p(', num2str(T), ') = ', num2str(res)]);
