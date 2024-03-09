@@ -19,7 +19,11 @@ tolerance=1e-14;
 kmax=1e3;
 
 %% plot function
-functions = figure('Name','Functions','NumberTitle','off');
+f = figure();
+f.Name = 'Functions';
+f.NumberTitle = 'off';
+f.Position = [0, 1000, 800, 600]
+
 subplot(2, 2, 1);
 fplot(fun, [a, b]);
 grid on;
@@ -69,7 +73,7 @@ a = 0; b = 250;
 % function definition
 p_fun = @(t) logistic_growth(t, pm, p0, K);
 
-figure(functions);
+figure(f);
 subplot(2, 2, 2);
 fplot(p_fun, [a, b]);
 grid on;

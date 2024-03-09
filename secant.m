@@ -17,16 +17,22 @@ function [final_guess, guesses, interations, residual] = secant( ...
 
     k = interations;
 
-    figure('Name','Secant method','NumberTitle','off');
+    f = figure();
+    f.Name = 'Secant method';
+    f.NumberTitle = 'off';
+    f.Position = [1600, 0, 800, 900]
+
     subplot(3, 2, 1);
     semilogy(1:k, guesses, '.-');
     title("approximation of $p_m$", 'interpreter', 'latex');
     xlabel("k"); ylabel("guess");
+    yline(final_guess, ':', 'final guess');
 
     subplot(3, 2, 3);
     semilogy(1:k, residual, '.-');
     title("residual decay", 'interpreter', 'latex');
     xlabel("k"); ylabel("residual");
+    yline(tolerance, ':', 'tolerance');
 
     subplot(3, 2, 2);
     ratio_1 = residual(2:end) ./ residual(1:end-1);
