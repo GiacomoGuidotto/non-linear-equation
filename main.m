@@ -22,7 +22,7 @@ kmax=1e3;
 f = figure();
 f.Name = 'Functions';
 f.NumberTitle = 'off';
-f.Position = [0, 1000, 800, 600]
+f.Position = [0, 1000, 800, 600];
 
 subplot(2, 2, 1);
 fplot(fun, [a, b]);
@@ -54,7 +54,7 @@ x1 = 35000;
 );
 
 %% approximate p_m via Secant method
-[pm_secant] = secant( ...
+pm_secant = secant_method( ...
     fun, x0, x1, kmax, tolerance ...
 );
 
