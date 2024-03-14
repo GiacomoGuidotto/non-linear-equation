@@ -4,6 +4,7 @@ function [zero, x, k, re] = picard( ...
     % init env
     x = x0;
     re = Inf(1, length(x));
+    % TODO add ae
 
     % init re
     for k = 2:length(x)

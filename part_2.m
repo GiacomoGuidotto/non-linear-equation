@@ -8,27 +8,6 @@ clc
 
 %% System definition
 
-% Interval to plot
-x1 = linspace(-1, 1, 10);
-x2 = linspace(-1, 1, 10);
-[X1, X2] = meshgrid(x1, x2);
-
-% Compute the corresponding values of y1 and y2
-Y1 = X1.^2 + X2.^2 - 1;
-Y2 = sin(pi/2 * X1) + X2.^3;
-
-% Plot the surfaces
-figure;
-surf(X1, X2, Y1, 'FaceAlpha', 0.5);
-hold on;
-surf(X1, X2, Y2, 'FaceAlpha', 0.5);
-xlabel('x1'); ylabel('x2'); zlabel('y');
-title('3D plot of the system of equations');
-legend('x1^2 + x2^2 - 1 = 0', 'sin(pi/2 * x1) + x2^3 = 0');
-view(-40, 30);
-grid on;
-colorbar;
-hold off;
 
 %% Find zeros
 % termination criteria
@@ -49,10 +28,31 @@ x1 = [-1, 1]';
     @sys, @jac, x1, kmax, tolerance ...
 );
 
+disp("Netwon method");
 disp(['zero1 = [', num2str(zero1(1)), ' ', num2str(zero1(2)), ']']);
 disp(['k1 = ', num2str(k1)]);
 disp(['zero2 = [', num2str(zero2(1)), ' ', num2str(zero2(2)), ']']);
 disp(['k2 = ', num2str(k2)]);
+
+% Broyden method for both
+
+B0 = eye(2);
+
+[zero1, ~, k1] = broydensys( ...
+    @sys, B0, x0, kmax, tolerance ...
+);
+
+[zero2, ~, k2] = broydensys( ...
+    @sys, B0, x1, kmax, tolerance ...
+);
+
+disp("Broyden method");
+disp(['zero1 = [', num2str(zero1(1)), ' ', num2str(zero1(2)), ']']);
+disp(['k1 = ', num2str(k1)]);
+disp(['zero2 = [', num2str(zero2(1)), ' ', num2str(zero2(2)), ']']);
+disp(['k2 = ', num2str(k2)]);
+
+
 
 %% Appendix
 % Tested system
