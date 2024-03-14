@@ -5,6 +5,13 @@ function zero = secant_method( ...
         fun, x0, x1, kmax, tolerance ...
     );
 
+    ratio_1 = residual(2:end) ./ residual(1:end-1);
+
+    ratio_2 = residual(2:end) ./ (residual(1:end-1) .^ 2);
+
+    golden = (1 + sqrt(5)) / 2;
+    ratio_3 = residual(2:end) ./ (residual(1:end-1) .^ golden);
+
     f = figure();
     f.Name = 'Secant method';
     f.NumberTitle = 'off';
@@ -23,20 +30,16 @@ function zero = secant_method( ...
     yline(tolerance, ':', 'tolerance');
 
     subplot(3, 2, 2);
-    ratio_1 = residual(2:end) ./ residual(1:end-1);
     semilogy(ratio_1, '.-');
     title('ratio 1: $\frac{d_k}{d_{k-1}}$', 'interpreter', 'latex');
     xlabel("k"); ylabel("ratio");
 
     subplot(3, 2, 4);
-    ratio_2 = residual(2:end) ./ (residual(1:end-1) .^ 2);
     semilogy(ratio_2, '.-');
     title('ratio 2: $\frac{d_k}{d_{k-1}^2}$', 'interpreter', 'latex');
     xlabel("k"); ylabel("ratio");
 
     subplot(3, 2, 6);
-    golden = (1 + sqrt(5)) / 2;
-    ratio_3 = residual(2:end) ./ (residual(1:end-1) .^ golden);
     semilogy(ratio_3, '.-');
     title('ratio 3: $\frac{d_k}{d_{k-1}^{1.618}}$', 'interpreter', 'latex');
     xlabel("k"); ylabel("ratio");
