@@ -45,4 +45,8 @@ function zero = fxsecant( ...
             '$\frac{d_k}{d_{k-1}^{1.618}}$', ...
              'interpreter', 'latex');
     xlabel("k"); ylabel("ratio");
+
+    varNames = ["x", "residual", "ratio p = 1", "ratio p = 2", "ratio p = ϕ"];
+    T = table(x', residual', ratio_1', ratio_2', ratio_3', 'VariableNames', varNames);
+    writetable(T, 'fxsecant.csv', 'Delimiter',';');
 end

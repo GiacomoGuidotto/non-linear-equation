@@ -45,6 +45,7 @@ function zero = newton( ...
              'interpreter', 'latex');
     xlabel("k"); ylabel("ratio");
 
-    T = table(x, residual, ratio_1, ratio_2, ratio_3);
-    disp(T);
+    varNames = ["x", "residual", "ratio p = 1", "ratio p = 2", "ratio p = ϕ"];
+    T = table(x', residual', ratio_1', ratio_2', ratio_3', 'VariableNames', varNames);
+    writetable(T, 'newton.csv', 'Delimiter',';');
 end
