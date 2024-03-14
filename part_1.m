@@ -1,9 +1,33 @@
-%% clear envinronment
+% Clear environment
+
 clear
 close all
 clc
 
-%% functions definition
+%% Non linear equations
+%% Part 1 - Growth Model
+% $$p(t) = \frac{p_m}{1 + (\frac{p_m}{p_0} - 1) e^{-Kp_mt}}$$
+% 
+% given $K = 2*10^-6$ and $p_0 = p(0) = 100$
+% 
+% after plotting $t_1 = 60$ we have $p_1 = p(t_1) = 25000$
+% 
+% solving for $p_m$:
+% 
+% $$(1 + (\frac{p_m}{p_0} - 1) e^{-Kp_mt})p_1 = p_m$$
+% 
+% $$(1 + (\frac{p_m}{p_0} - 1) e^{-Kp_mt})p_1 - p_m = 0$$
+% 
+% $$f_{p_m} = p_1(1 + (\frac{p_m}{p_0} - 1) e^{-Kp_mt}) - p_m$$
+% 
+% with derivative:
+% 
+% $$f'_{p_m} = -1 + \frac{p_1 e^{-K p_mt}(1 + K(-p_m + p_0)t)}{p_0}$$
+% 
+% The function as a code are defined at the end of the script.
+
+%% Functions definition
+
 % interval to plot
 a = 0; b = 100000;
 
@@ -14,11 +38,8 @@ K = 2e-6; p0 = 100; t1 = 60; p1 = 25000;
 fun = @(pm) logistic_growth_pm(pm, K, p0, t1, p1);
 fun_prime = @(pm) logistic_growth_pm_prime(pm, K, p0, t1, p1);
 
-% termination criteria
-tolerance=1e-14;
-kmax=1e3;
-
 %% plot function
+
 f = figure();
 f.Name = 'Functions';
 f.NumberTitle = 'off';
@@ -40,23 +61,34 @@ title("$f'$", 'interpreter','latex');
 xlabel("p_m"); ylabel("f'(p_m)");
 xline(0, ':k'); yline(0, ':k');
 
+%% Approximate $p_m$
+% termination criteria
+tolerance=1e-14;
+kmax=1e3;
 
-%% approximate p_m via Newton method
+% initial points
 x0 = 30000;
+x1 = 35000;
+
+% Newton method
+
 pm = newton( ...
     fun, fun_prime, x0, kmax, tolerance ...
 );
 
-%% approximate p_m via Fixed Secant method
-x1 = 35000;
+% Fixed Secant method
+
 pm_fx_secant = fxsecant( ...
     fun, x0, x1, kmax, tolerance ...
 );
 
-%% approximate p_m via Secant method
+% Secant method
+
 pm_secant = secant( ...
     fun, x0, x1, kmax, tolerance ...
 );
+
+% Check for convergence of the three methods into a single solution
 
 convergence_tolerance = 1e-8;
 if abs(pm - pm_fx_secant) > convergence_tolerance || ...
@@ -64,8 +96,12 @@ if abs(pm - pm_fx_secant) > convergence_tolerance || ...
     error("the three methods doesn't converge");
 end
 
-%% define logistic growth model
+%%
+% The final solution is printed out
+
 disp(['final approximation of p_m: ', num2str(pm)]);
+
+%% Define logistic growth model
 
 % interval to plot
 a = 0; b = 250;
@@ -91,7 +127,12 @@ hold off;
 
 disp(['p(', num2str(T), ') = ', num2str(res)]);
 
-%% tested functions
+%% Picard Iteration
+% eh...
+
+%% Appendix
+% Tested functions
+
 function f = logistic_growth(t, pm, p0, K)
     f = pm / (1 + (pm / p0 - 1) * exp(-K * pm * t));
 end
