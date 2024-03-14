@@ -1,14 +1,14 @@
 function [zero, x, k, re] = picard( ...
-    fun, x0, kmax, tolerance ...
+    kernel, x0, kmax, tolerance ...
 )
     % init env
     x = x0;
-    re = abs(x0 - fun(x0)) / x0;
+    re = Inf(1, length(x));
 
     % Picard iteration
-    k = 1;
+    k = length(x);
     while re(k) > tolerance && k < kmax
-        x(k + 1) = fun(x(k));
+        x(k + 1) = kernel(x, k);
 
         re(k + 1) = abs(x(k + 1) - x(k)) / x(k);
 

@@ -1,29 +1,56 @@
-function [zero, x, k, re] = secant( ...
-    fun, x1, x2, kmax, tolerance ...
+function zero = secant( ...
+    fun, x0, x1, kmax, tolerance ...
 )
-    % init env
-    x = [x1, x2];
-    y1 = fun(x1);
-    re = abs(x2 - x1) / x1;
+    y1 = fun(x0);
 
-    % secant step
-    k = 2;
-    while re(k - 1) > tolerance && k < kmax
+    function xnew = secant_kernel(x, k)
         y2 = fun(x(k));
         dx = - y2 * (x(k) - x(k - 1)) / (y2 - y1);
-        x(k + 1) = x(k) + dx;
-
-        re(k) = abs(x(k + 1) - x(k)) / x(k);
-
-        k = k + 1;
+        xnew = x(k) + dx;
         y1 = y2;
     end
 
-    % termination criteria check
-    if k == kmax
-        disp('Warning: Maximum iterations reached');
-    end
 
-    % return
-    zero = x(k - 1);
+    [zero, x, ~, residual] = picard( ...
+        @secant_kernel, [x0, x1], kmax, tolerance ...
+    );
+
+    ratio_1 = residual(2:end) ./ residual(1:end-1);
+
+    ratio_2 = residual(2:end) ./ (residual(1:end-1) .^ 2);
+
+    golden = (1 + sqrt(5)) / 2;
+    ratio_3 = residual(2:end) ./ (residual(1:end-1) .^ golden);
+
+    f = figure();
+    f.Name = 'Secant method';
+    f.NumberTitle = 'off';
+    f.Position = [1600, 0, 800, 900];
+
+    subplot(3, 2, 1);
+    semilogy(x, '.-');
+    title("approximation of $p_m$", 'interpreter', 'latex');
+    xlabel("k"); ylabel("guess");
+    yline(zero, ':', 'final guess');
+
+    subplot(3, 2, 3);
+    semilogy(residual, '.-');
+    title("residual decay", 'interpreter', 'latex');
+    xlabel("k"); ylabel("residual");
+    yline(tolerance, ':', 'tolerance');
+
+    subplot(3, 2, 2);
+    semilogy(ratio_1, '.-');
+    title('ratio 1: $\frac{d_k}{d_{k-1}}$', 'interpreter', 'latex');
+    xlabel("k"); ylabel("ratio");
+
+    subplot(3, 2, 4);
+    semilogy(ratio_2, '.-');
+    title('ratio 2: $\frac{d_k}{d_{k-1}^2}$', 'interpreter', 'latex');
+    xlabel("k"); ylabel("ratio");
+
+    subplot(3, 2, 6);
+    semilogy(ratio_3, '.-');
+    title('ratio 3: $\frac{d_k}{d_{k-1}^{1.618}}$', 'interpreter', 'latex');
+    xlabel("k"); ylabel("ratio");
 end

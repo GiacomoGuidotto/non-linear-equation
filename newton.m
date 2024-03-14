@@ -1,8 +1,10 @@
-function zero = secant_method( ...
-    fun, x0, x1, kmax, tolerance ...
+function zero = newton( ...
+    fun, fun_prime, x0, kmax, tolerance ...
 )
-    [zero, x, ~, residual] = secant( ...
-        fun, x0, x1, kmax, tolerance ...
+    newton_kernel = @(x, k) x(k) - fun(x(k)) / fun_prime(x(k));
+
+    [zero, x, ~, residual] = picard( ...
+        newton_kernel, x0, kmax, tolerance ...
     );
 
     ratio_1 = residual(2:end) ./ residual(1:end-1);
@@ -13,9 +15,9 @@ function zero = secant_method( ...
     ratio_3 = residual(2:end) ./ (residual(1:end-1) .^ golden);
 
     f = figure();
-    f.Name = 'Secant method';
+    f.Name = 'Newton-Raphson method';
     f.NumberTitle = 'off';
-    f.Position = [1600, 0, 800, 900];
+    f.Position = [0, 0, 800, 900];
 
     subplot(3, 2, 1);
     semilogy(x, '.-');
@@ -43,4 +45,7 @@ function zero = secant_method( ...
     semilogy(ratio_3, '.-');
     title('ratio 3: $\frac{d_k}{d_{k-1}^{1.618}}$', 'interpreter', 'latex');
     xlabel("k"); ylabel("ratio");
+
+    T = table(x, residual, ratio_1, ratio_2, ratio_3);
+    disp(T);
 end
