@@ -4,7 +4,7 @@ function zero = fxsecant( ...
     slope = (fun(x1) - fun(x0)) / (x1 - x0);
     fxsecant_kernel = @(x, k) x(k) - fun(x(k)) / slope;
 
-    [zero, x, ~, residual] = picard( ...
+    [zero, x, k, dx, residual] = picard( ...
         fxsecant_kernel, x0, kmax, tolerance ...
     );
 
@@ -46,7 +46,7 @@ function zero = fxsecant( ...
              'interpreter', 'latex');
     xlabel("k"); ylabel("ratio");
 
-    varNames = ["x", "residual", "ratio p = 1", "ratio p = 2", "ratio p = ϕ"];
-    T = table(x', residual', ratio_1', ratio_2', ratio_3', 'VariableNames', varNames);
+    varNames = ["k", "x", "increment", "relative increment", "ratio p = 1", "ratio p = 2", "ratio p = ϕ"];
+    T = table((0:(k - 1))', x', dx', residual', ratio_1', ratio_2', ratio_3', 'VariableNames', varNames);
     writetable(T, 'fxsecant.csv', 'Delimiter',';');
 end

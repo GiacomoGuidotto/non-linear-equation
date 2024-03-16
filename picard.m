@@ -1,14 +1,15 @@
-function [zero, x, k, re] = picard( ...
+function [zero, x, k, dx, re] = picard( ...
     kernel, x0, kmax, tolerance ...
 )
     % init env
     x = x0;
     re = Inf(1, length(x));
-    % TODO add ae
+    dx = zeros(1, length(x));
 
-    % init re
+    % init vectors
     for k = 2:length(x)
-        re(k) = abs(x(k) - x(k - 1)) / x(k - 1);
+        dx(k) = abs(x(k) - x(k - 1));
+        re(k) = dx(k) / x(k - 1);
     end
 
     % Picard iteration
@@ -16,7 +17,8 @@ function [zero, x, k, re] = picard( ...
     while re(k) > tolerance && k < kmax
         x(k + 1) = kernel(x, k);
 
-        re(k + 1) = abs(x(k + 1) - x(k)) / x(k);
+        dx(k + 1) = abs(x(k + 1) - x(k));
+        re(k + 1) = dx(k + 1) / x(k);
 
         k = k + 1;
     end
