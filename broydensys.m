@@ -3,18 +3,22 @@ function [zero, x, k, re] = broydensys( ...
 )
     % init env
     x = {x0};
+    fx = {fun(x0)};
+    dx = {0};
     B = {B0};
     re = Inf;
 
     k = 1;
     while re(k) > tolerance && k < kmax
-        dx = - B{k} \ fun(x{k});
-        x{k + 1} = x{k} + dx;
+        dx{k + 1} = - B{k} \ fx{k};
+        x{k + 1} = x{k} + dx{k + 1};
 
-        df = fun(x{k + 1}) - fun(x{k});
-        B{k + 1} = B{k} + ((df - B{k} * dx) * dx') / (dx' * dx);
+        fx{k + 1} = fun(x{k + 1});
 
-        re(k + 1) = norm(dx);
+        df = fx{k + 1} - fx{k};
+        B{k + 1} = B{k} + ((df - B{k} * dx{k + 1}) * dx{k + 1}') / (dx{k + 1}' * dx{k + 1});
+
+        re(k + 1) = norm(dx{k + 1});
 
         k = k + 1;
     end

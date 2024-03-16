@@ -7,7 +7,32 @@ clc
 %% Part 2 - Non linear systems
 
 %% System definition
+f1 = @(x, y) x^2 + y^2 - 1;
+f2 = @(x, y) sin(pi/2 * x) + y^3;
 
+% Define the range of x values
+x1_range = -2:0.1:2;
+x2_range = -2:0.1:2;
+[X1, X2] = meshgrid(x1_range, x2_range);
+
+% Calculate the corresponding y values
+Y1 = zeros(size(X1));
+Y2 = zeros(size(X1));
+Z0 = zeros(size(X1));
+for i = 1:numel(X1)
+    Y1(i) = f1(X1(i), X2(i));
+    Y2(i) = f2(X1(i), X2(i));
+end
+
+% Plot the functions
+figure;
+surf(X1, X2, Y1, 'FaceColor', 'r', 'EdgeColor', 'none');
+hold on;
+surf(X1, X2, Y2, 'FaceColor', 'b', 'EdgeColor', 'none');
+hold on;
+mesh(X1, X2, Z0);
+title('3D plot of the system');
+xlabel('x1'); ylabel('x2'); zlabel('y');
 
 %% Find zeros
 % termination criteria
@@ -20,13 +45,25 @@ x1 = [-1, 1]';
 
 % Newton method for both
 
-[zero1, ~, k1] = newtonsys( ...
+[zero1, x, k1, dx, re] = newtonsys( ...
     @sys, @jac, x0, kmax, tolerance ...
 );
 
-[zero2, ~, k2] = newtonsys( ...
+[zero2, xalt, k2] = newtonsys( ...
     @sys, @jac, x1, kmax, tolerance ...
 );
+
+for i = 1:k1
+    scatter3(x{i}(1), x{i}(2), 0, 'g', 'filled');
+end
+for i = 1:k2
+    scatter3(xalt{i}(1), xalt{i}(2), 0, 'k', 'filled');
+end
+
+
+scatter3(zero1(1), zero1(2), 0, 'g', 'filled');
+scatter3(zero2(1), zero2(2), 0, 'k', 'filled');
+
 
 disp("Netwon method");
 disp(['zero1 = [', num2str(zero1(1)), ' ', num2str(zero1(2)), ']']);
