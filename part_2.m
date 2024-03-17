@@ -53,9 +53,9 @@ f.Position = [0, 0, 800, 1300];
 % Plot 1: approximations over the systems
 
 subplot(3, 1, 1);
-surf(X1, X2, Y1, 'FaceColor', 'r');
+d1 = surf(X1, X2, Y1, 'FaceColor', 'r');
 hold on;
-surf(X1, X2, Y2, 'FaceColor', 'b');
+d2 = surf(X1, X2, Y2, 'FaceColor', 'b');
 hold on;
 mesh(X1, X2, Z0);
 title('zero approximations with Newton method', 'interpreter', 'latex');
@@ -70,7 +70,7 @@ for i = 1:kA
 
     plot3(x_values, y_values, z_values, 'g', 'LineWidth', 2);
 end
-scatter3(zeroA(1), zeroA(2), 0, 'g', 'filled');
+d3 = scatter3(zeroA(1), zeroA(2), 0, 'g', 'filled');
 
 for i = 1:kB
     x_values = xB{i}(1) * ones(size(z_values));
@@ -78,7 +78,11 @@ for i = 1:kB
 
     plot3(x_values, y_values, z_values, 'k', 'LineWidth', 2);
 end
-scatter3(zeroB(1), zeroB(2), 0, 'k', 'filled');
+d4 = scatter3(zeroB(1), zeroB(2), 0, 'k', 'filled');
+
+legend([d1, d2, d3, d4], ["$x^2 + y^2 = 1$", "$sin(\frac \pi 2 x) + y^3 = 0$", ...
+    "first zero approximation", "second zero approximation"], ...
+    'Location','northeast', 'interpreter', 'latex');
 
 % Plot 2: convergences errors
 
@@ -154,9 +158,9 @@ f.Position = [800, 0, 1600, 1300];
 % Plot 1: approximations over the systems
 
 subplot(3, 2, 1);
-surf(X1, X2, Y1, 'FaceColor', 'r');
+d1 = surf(X1, X2, Y1, 'FaceColor', 'r');
 hold on;
-surf(X1, X2, Y2, 'FaceColor', 'b');
+d2 = surf(X1, X2, Y2, 'FaceColor', 'b');
 hold on;
 mesh(X1, X2, Z0);
 title('zero approximations with Broyden method with $\textbf{B}^{(0)} = \textbf{I}$', ...
@@ -172,7 +176,7 @@ for i = 1:kA
 
     plot3(x_values, y_values, z_values, 'g', 'LineWidth', 2);
 end
-scatter3(zeroA(1), zeroA(2), 0, 'g', 'filled');
+d3 = scatter3(zeroA(1), zeroA(2), 0, 'g', 'filled');
 
 for i = 1:kB
     x_values = xB{i}(1) * ones(size(z_values));
@@ -180,7 +184,11 @@ for i = 1:kB
 
     plot3(x_values, y_values, z_values, 'k', 'LineWidth', 2);
 end
-scatter3(zeroB(1), zeroB(2), 0, 'k', 'filled');
+d4 = scatter3(zeroB(1), zeroB(2), 0, 'k', 'filled');
+
+legend([d1, d2, d3, d4], ["$x^2 + y^2 = 1$", "$sin(\frac \pi 2 x) + y^3 = 0$", ...
+    "first zero approximation", "second zero approximation"], ...
+    'Location','northeast', 'interpreter', 'latex');
 
 % Plot 2: convergences errors
 
@@ -255,9 +263,9 @@ B0 = 2 * eye(2);
 % Plot 1: approximations over the systems
 
 subplot(3, 2, 2);
-surf(X1, X2, Y1, 'FaceColor', 'r');
+d1 = surf(X1, X2, Y1, 'FaceColor', 'r');
 hold on;
-surf(X1, X2, Y2, 'FaceColor', 'b');
+d2 = surf(X1, X2, Y2, 'FaceColor', 'b');
 hold on;
 mesh(X1, X2, Z0);
 title('zero approximations with Broyden method with $\textbf{B}^{(0)} = 2\textbf{I}$', ...
@@ -273,7 +281,7 @@ for i = 1:kA
 
     plot3(x_values, y_values, z_values, 'g', 'LineWidth', 2);
 end
-scatter3(zeroA(1), zeroA(2), 0, 'g', 'filled');
+d3 = scatter3(zeroA(1), zeroA(2), 0, 'g', 'filled');
 
 for i = 1:kB
     x_values = xB{i}(1) * ones(size(z_values));
@@ -281,7 +289,11 @@ for i = 1:kB
 
     plot3(x_values, y_values, z_values, 'k', 'LineWidth', 2);
 end
-scatter3(zeroB(1), zeroB(2), 0, 'k', 'filled');
+d4 = scatter3(zeroB(1), zeroB(2), 0, 'k', 'filled');
+
+legend([d1, d2, d3, d4], ["$x^2 + y^2 = 1$", "$sin(\frac \pi 2 x) + y^3 = 0$", ...
+    "first zero approximation", "second zero approximation"], ...
+    'Location','northeast', 'interpreter', 'latex');
 
 % Plot 2: convergences errors
 
