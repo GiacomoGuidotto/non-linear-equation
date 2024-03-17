@@ -6,6 +6,7 @@ function [zero, x, k, re] = broydensys( ...
     fx = {fun(x0)};
     dx = {0};
     B = {B0};
+    ae = Inf;
     re = Inf;
 
     k = 1;
@@ -18,7 +19,8 @@ function [zero, x, k, re] = broydensys( ...
         df = fx{k + 1} - fx{k};
         B{k + 1} = B{k} + ((df - B{k} * dx{k + 1}) * dx{k + 1}') / (dx{k + 1}' * dx{k + 1});
 
-        re(k + 1) = norm(dx{k + 1});
+        ae(k + 1) = norm(dx{k + 1});
+        re(k + 1) = norm(dx{k + 1}) / norm(x{k});
 
         k = k + 1;
     end

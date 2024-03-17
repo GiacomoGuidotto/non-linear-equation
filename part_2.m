@@ -24,8 +24,35 @@ for i = 1:numel(X1)
     Y2(i) = f2(X1(i), X2(i));
 end
 
-% Plot the functions
-figure;
+%% Find zeros
+% termination criteria
+kmax = 1e3;
+tolerance = 1e-8;
+
+% initial points
+x0A = [1; 1];
+x0B = [-1; 1];
+
+%% Newton method for both
+
+[zeroA, xA, kA, dxA, aeA, reA] = newtonsys( ...
+    @sys, @jac, x0A, kmax, tolerance ...
+);
+
+[zeroB, xB, kB, dxB, aeB, reB] = newtonsys( ...
+    @sys, @jac, x0B, kmax, tolerance ...
+);
+
+%% Plot Newton method
+
+f = figure();
+f.Name = 'Non-linear system: Newton-Raphson method';
+f.NumberTitle = 'off';
+f.Position = [0, 0, 1000, 1500];
+
+% Plot functions
+
+subplot(3, 1, 1);
 surf(X1, X2, Y1, 'FaceColor', 'r', 'EdgeColor', 'none');
 hold on;
 surf(X1, X2, Y2, 'FaceColor', 'b', 'EdgeColor', 'none');
@@ -34,53 +61,70 @@ mesh(X1, X2, Z0);
 title('3D plot of the system');
 xlabel('x1'); ylabel('x2'); zlabel('y');
 
-%% Find zeros
-% termination criteria
-kmax = 1e3;
-tolerance = 1e-8;
+% Draw x lines and the zero points, green for the first point, black for the second
 
-% initial points
-x0 = [1, 1]';
-x1 = [-1, 1]';
+z_values = linspace(-10, 10, 2);
+for i = 1:kA
+    x_values = xA{i}(1) * ones(size(z_values));
+    y_values = xA{i}(2) * ones(size(z_values));
 
-% Newton method for both
-
-[zero1, x, k1, dx, re] = newtonsys( ...
-    @sys, @jac, x0, kmax, tolerance ...
-);
-
-[zero2, xalt, k2] = newtonsys( ...
-    @sys, @jac, x1, kmax, tolerance ...
-);
-
-for i = 1:k1
-    scatter3(x{i}(1), x{i}(2), 0, 'g', 'filled');
+    plot3(x_values, y_values, z_values, 'g', 'LineWidth', 2);
 end
-for i = 1:k2
-    scatter3(xalt{i}(1), xalt{i}(2), 0, 'k', 'filled');
+scatter3(zeroA(1), zeroA(2), 0, 'g', 'filled');
+
+for i = 1:kB
+    x_values = xB{i}(1) * ones(size(z_values));
+    y_values = xB{i}(2) * ones(size(z_values));
+
+    plot3(x_values, y_values, z_values, 'k', 'LineWidth', 2);
 end
+scatter3(zeroB(1), zeroB(2), 0, 'k', 'filled');
+
+% Plot the two residual
+
+subplot(3, 1, 2);
+semilogy(1:kA, reA, '.-', 1:kB, reB, '.-');
+title("residual decay", 'interpreter', 'latex');
+xlabel("k"); ylabel("residual");
+yline(tolerance, ':', 'tolerance');
+legend(['$x0 = (', num2str(x0A(1)), ', ', num2str(x0A(1)), ')^T$'], ...
+ ['$x0 = (', num2str(x0B(1)), ', ', num2str(x0B(1)), ')^T$'], ...
+ 'Location', 'northeast', 'interpreter', 'latex')
+
+% Compute the convergence ratios
+
+ratio1 = reA(2:end) ./ reA(1:end-1);
+ratio1 = [Inf ratio1];
+
+ratio2 = reA(2:end) ./ (reA(1:end-1) .^ 2);
+ratio2 = [Inf ratio2];
+
+subplot(3, 1, 3);
+semilogy(1:length(ratio1), ratio1, '.-', ...
+        1:length(ratio2), ratio2, '.-');
+title('ratios convergence (for the first point)', 'interpreter', 'latex');
+legend('$\frac{d_k}{d_{k-1}}$', ...
+        '$\frac{d_k}{d_{k-1}^2}$', ...
+         'interpreter', 'latex');
+xlabel("k"); ylabel("ratio");
 
 
-scatter3(zero1(1), zero1(2), 0, 'g', 'filled');
-scatter3(zero2(1), zero2(2), 0, 'k', 'filled');
+% Log the final values
 
+disp("Non-linear systems: Netwon-Raphson method");
+disp(['first zero = (', num2str(zeroA(1)), ', ', num2str(zeroA(2)), ') with ', num2str(kA), ' iterations']);
+disp(['second zero = (', num2str(zeroB(1)), ', ', num2str(zeroB(2)), ') with ', num2str(kB), ' iterations']);
 
-disp("Netwon method");
-disp(['zero1 = [', num2str(zero1(1)), ' ', num2str(zero1(2)), ']']);
-disp(['k1 = ', num2str(k1)]);
-disp(['zero2 = [', num2str(zero2(1)), ' ', num2str(zero2(2)), ']']);
-disp(['k2 = ', num2str(k2)]);
-
-% Broyden method for both
+%% Broyden method for both
 
 B0 = eye(2);
 
 [zero1, ~, k1] = broydensys( ...
-    @sys, B0, x0, kmax, tolerance ...
+    @sys, B0, x0A, kmax, tolerance ...
 );
 
 [zero2, ~, k2] = broydensys( ...
-    @sys, B0, x1, kmax, tolerance ...
+    @sys, B0, x0B, kmax, tolerance ...
 );
 
 disp("Broyden method");

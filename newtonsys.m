@@ -1,9 +1,10 @@
-function [zero, x, k, dx, re] = newtonsys( ...
+function [zero, x, k, dx, ae, re] = newtonsys( ...
     fun, jac, x0, kmax, tolerance ...
 )
     % init env
     x = {x0};
     dx = {0};
+    ae = Inf;
     re = Inf;
 
     k = 1;
@@ -11,7 +12,8 @@ function [zero, x, k, dx, re] = newtonsys( ...
         dx{k + 1} = - jac(x{k}) \ fun(x{k});
         x{k + 1} = x{k} + dx{k + 1};
 
-        re(k + 1) = norm(dx{k + 1});
+        ae(k + 1) = norm(dx{k + 1});
+        re(k + 1) = norm(dx{k + 1}) / norm(x{k});
 
         k = k + 1;
     end
