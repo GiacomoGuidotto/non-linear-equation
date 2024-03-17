@@ -35,11 +35,11 @@ x0B = [-1; 1];
 
 %% Newton method
 
-[zeroA, xA, kA, dxA, aeA, reA] = newtonsys( ...
+[zeroA, xA, kA, aeA, reA] = newtonsys( ...
     @sys, @jac, x0A, kmax, tolerance ...
 );
 
-[zeroB, xB, kB, dxB, aeB, reB] = newtonsys( ...
+[zeroB, xB, kB, aeB, reB] = newtonsys( ...
     @sys, @jac, x0B, kmax, tolerance ...
 );
 
@@ -107,6 +107,21 @@ legend('$\frac{d_k}{d_{k-1}}$', ...
          'interpreter', 'latex');
 xlabel("k"); ylabel("ratio");
 
+% Print results in a table
+
+varNames = ["k", "increment (normalized)", "relative increment (normilized)", "ratio p = 1", "ratio p = 2"];
+T = table((0:(kA - 1))', aeA', reA', ratio1', ratio2', 'VariableNames', varNames);
+writetable(T, 'newtonsys_A.csv', 'Delimiter',';');
+
+ratio1 = reB(2:end) ./ reB(1:end-1);
+ratio1 = [Inf ratio1];
+
+ratio2 = reB(2:end) ./ (reB(1:end-1) .^ 2);
+ratio2 = [Inf ratio2];
+
+varNames = ["k", "increment (normalized)", "relative increment (normilized)", "ratio p = 1", "ratio p = 2"];
+T = table((0:(kB - 1))', aeB', reB', ratio1', ratio2', 'VariableNames', varNames);
+writetable(T, 'newtonsys_B.csv', 'Delimiter',';');
 
 % Log the final values
 
@@ -116,16 +131,16 @@ disp(['first zero = (', num2str(zeroA(1)), ', ', num2str(zeroA(2)), ...
     ') with ', num2str(kA), ' iterations']);
 disp(['second zero = (', num2str(zeroB(1)), ', ', num2str(zeroB(2)), ...
     ') from x0 = (', num2str(x0B(1)), ', ', num2str(x0B(1)), ...
-    ') with ', num2str(kB), ' iterations']);;
+    ') with ', num2str(kB), ' iterations']);
 
 %% Broyden method with B0 = I
 B0 = eye(2);
 
-[zeroA, xA, kA, dxA, aeA, reA] = broydensys( ...
+[zeroA, xA, kA, aeA, reA] = broydensys( ...
     @sys, B0, x0A, kmax, tolerance ...
 );
 
-[zeroB, xB, kB, dxB, aeB, reB] = broydensys( ...
+[zeroB, xB, kB, aeB, reB] = broydensys( ...
     @sys, B0, x0B, kmax, tolerance ...
 );
 
@@ -198,6 +213,22 @@ legend('$\frac{d_k}{d_{k-1}}$', ...
          'interpreter', 'latex');
 xlabel("k"); ylabel("ratio");
 
+% Print results in a table
+
+varNames = ["k", "increment (normalized)", "relative increment (normilized)", "ratio p = 1", "ratio p = 2"];
+T = table((0:(kA - 1))', aeA', reA', ratio1', ratio2', 'VariableNames', varNames);
+writetable(T, 'broydensys_B=I_A.csv', 'Delimiter',';');
+
+ratio1 = reB(2:end) ./ reB(1:end-1);
+ratio1 = [Inf ratio1];
+
+ratio2 = reB(2:end) ./ (reB(1:end-1) .^ 2);
+ratio2 = [Inf ratio2];
+
+varNames = ["k", "increment (normalized)", "relative increment (normilized)", "ratio p = 1", "ratio p = 2"];
+T = table((0:(kB - 1))', aeB', reB', ratio1', ratio2', 'VariableNames', varNames);
+writetable(T, 'broydensys_B=I_B.csv', 'Delimiter',';');
+
 % Log the final values
 
 disp('zero approximations with Broyden method with B0 = I');
@@ -211,11 +242,11 @@ disp(['second zero = (', num2str(zeroB(1)), ', ', num2str(zeroB(2)), ...
 %% Broyden method with B0 = 2I
 B0 = 2 * eye(2);
 
-[zeroA, xA, kA, dxA, aeA, reA] = broydensys( ...
+[zeroA, xA, kA, aeA, reA] = broydensys( ...
     @sys, B0, x0A, kmax, tolerance ...
 );
 
-[zeroB, xB, kB, dxB, aeB, reB] = broydensys( ...
+[zeroB, xB, kB, aeB, reB] = broydensys( ...
     @sys, B0, x0B, kmax, tolerance ...
 );
 
@@ -283,6 +314,22 @@ legend('$\frac{d_k}{d_{k-1}}$', ...
          'interpreter', 'latex');
 xlabel("k"); ylabel("ratio");
 
+% Print results in a table
+
+varNames = ["k", "increment (normalized)", "relative increment (normilized)", "ratio p = 1", "ratio p = 2"];
+T = table((0:(kA - 1))', aeA', reA', ratio1', ratio2', 'VariableNames', varNames);
+writetable(T, 'broydensys_B=2I_A.csv', 'Delimiter',';');
+
+ratio1 = reB(2:end) ./ reB(1:end-1);
+ratio1 = [Inf ratio1];
+
+ratio2 = reB(2:end) ./ (reB(1:end-1) .^ 2);
+ratio2 = [Inf ratio2];
+
+varNames = ["k", "increment (normalized)", "relative increment (normilized)", "ratio p = 1", "ratio p = 2"];
+T = table((0:(kB - 1))', aeB', reB', ratio1', ratio2', 'VariableNames', varNames);
+writetable(T, 'broydensys_B=2I_B.csv', 'Delimiter',';');
+
 % Log the final values
 
 disp('zero approximations with Broyden method with B0 = 2I');
@@ -292,7 +339,6 @@ disp(['first zero = (', num2str(zeroA(1)), ', ', num2str(zeroA(2)), ...
 disp(['second zero = (', num2str(zeroB(1)), ', ', num2str(zeroB(2)), ...
     ') from x0 = (', num2str(x0B(1)), ', ', num2str(x0B(1)), ...
     ') with ', num2str(kB), ' iterations']);
-
 
 %% Appendix
 % Tested system
@@ -309,4 +355,3 @@ function J = jac(x)
     J(2, 1) = (pi/2) * cos(pi/2 * x(1));
     J(2, 2) = 3 * x(2)^2;
 end
-
