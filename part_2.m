@@ -52,7 +52,7 @@ f.Position = [0, 0, 800, 1300];
 
 % Plot 1: approximations over the systems
 
-subplot(3, 1, 1);
+subplot(2, 1, 1);
 d1 = surf(X1, X2, Y1, 'FaceColor', 'r');
 hold on;
 d2 = surf(X1, X2, Y2, 'FaceColor', 'b');
@@ -86,7 +86,7 @@ legend([d1, d2, d3, d4], ["$x^2 + y^2 = 1$", "$sin(\frac \pi 2 x) + y^3 = 0$", .
 
 % Plot 2: convergences errors
 
-subplot(3, 1, 2);
+subplot(4, 1, 3);
 semilogy(reA, '.-');
 title(['residual decay with $x0 = (', num2str(x0A(1)), ', ', num2str(x0A(1)), ')^T$'], ...
     'interpreter', 'latex');
@@ -101,7 +101,7 @@ ratio1 = [Inf ratio1];
 ratio2 = reA(2:end) ./ (reA(1:end-1) .^ 2);
 ratio2 = [Inf ratio2];
 
-subplot(3, 1, 3);
+subplot(4, 1, 4);
 semilogy(1:length(ratio1), ratio1, '.-', ...
         1:length(ratio2), ratio2, '.-');
 title(['residual decay with $x0 = (', num2str(x0A(1)), ', ', num2str(x0A(1)), ')^T$'], ...
@@ -157,7 +157,7 @@ f.Position = [800, 0, 1600, 1300];
 
 % Plot 1: approximations over the systems
 
-subplot(3, 2, 1);
+subplot(2, 2, 1);
 d1 = surf(X1, X2, Y1, 'FaceColor', 'r');
 hold on;
 d2 = surf(X1, X2, Y2, 'FaceColor', 'b');
@@ -192,7 +192,7 @@ legend([d1, d2, d3, d4], ["$x^2 + y^2 = 1$", "$sin(\frac \pi 2 x) + y^3 = 0$", .
 
 % Plot 2: convergences errors
 
-subplot(3, 2, 3);
+subplot(4, 2, 5);
 semilogy(reA, '.-');
 title(['residual decay with $x0 = (', ...
     num2str(x0A(1)), ', ', num2str(x0A(1)), ...
@@ -209,7 +209,7 @@ ratio1 = [Inf ratio1];
 ratio2 = reA(2:end) ./ (reA(1:end-1) .^ 2);
 ratio2 = [Inf ratio2];
 
-subplot(3, 2, 5);
+subplot(4, 2, 7);
 semilogy(1:length(ratio1), ratio1, '.-', ...
         1:length(ratio2), ratio2, '.-');
 title(['residual decay with $x0 = (', ...
@@ -262,7 +262,7 @@ B0 = 2 * eye(2);
 
 % Plot 1: approximations over the systems
 
-subplot(3, 2, 2);
+subplot(2, 2, 2);
 d1 = surf(X1, X2, Y1, 'FaceColor', 'r');
 hold on;
 d2 = surf(X1, X2, Y2, 'FaceColor', 'b');
@@ -297,7 +297,7 @@ legend([d1, d2, d3, d4], ["$x^2 + y^2 = 1$", "$sin(\frac \pi 2 x) + y^3 = 0$", .
 
 % Plot 2: convergences errors
 
-subplot(3, 2, 4);
+subplot(4, 2, 6);
 semilogy(reA, '.-');
 title(['residual decay with $x0 = (', ...
     num2str(x0A(1)), ', ', num2str(x0A(1)), ...
@@ -314,7 +314,7 @@ ratio1 = [Inf ratio1];
 ratio2 = reA(2:end) ./ (reA(1:end-1) .^ 2);
 ratio2 = [Inf ratio2];
 
-subplot(3, 2, 6);
+subplot(4, 2, 8);
 semilogy(1:length(ratio1), ratio1, '.-', ...
         1:length(ratio2), ratio2, '.-');
 title(['residual decay with $x0 = (', ...
